@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "első teszt feladat",
+        "completed": false,
+        "due": "2020-08-07"
+    },
+    {
+        "id": 2,
+        "name": "Vue.js doksi olvasás",
+        "completed": true,
+        "due": "2020-08-12"
+    },
+    {
+        "id": 3,
+        "name": "harmadik teszt feladat",
+        "completed": false,
+        "due": "2020-09-07"
+    },
+    {
+        "id": 4,
+        "name": "negyedik teszt feladat",
+        "completed": false,
+        "due": "2020-11-11"
+    }
+]
