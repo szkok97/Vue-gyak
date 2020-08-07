@@ -7,14 +7,13 @@
     <router-view />
   </div>
 </template>
-<script>
-</script>
+<script></script>
 <style scpoed>
-#nav{
+#nav {
   text-align: center;
   padding-top: 20px;
 }
-#nav a{
+#nav a {
   color: black;
   padding: 10px;
   font-size: 25px;

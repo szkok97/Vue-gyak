@@ -1,48 +1,81 @@
 <template>
   <div>
     <h1>Home</h1>
+    <form action="">
+      <input type="text" v-model="item" />
+      <input type="date" v-model="due" @blur="addItem" />
+    </form>
     <ul>
-      <li v-for="item in tasks" :key="item.id" :class="{completed: item.completed}">
-        <input type="checkbox" :checked=item.completed @click="changeCompleted(item.id)">
-        {{item.name}} : {{item.due}}
+      <li
+        v-for="item in tasks"
+        :key="item.id"
+        :class="{ completed: item.completed }"
+      >
+        <input
+          type="checkbox"
+          :checked="item.completed"
+          @click="changeCompleted(item.id)"
+        />
+        {{ item.name }} : {{ item.due }}
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-export default{
-  name: 'home',
-  components: { //html-taget hozunk létre ide mennek az alkomponensek
-
+import axios from "axios";
+export default {
+  name: "home",
+  components: {
+    //html-taget hozunk létre ide mennek az alkomponensek
   },
-  data(){   //statikus adatok változók
+  data() {
+    //statikus adatok változók
     return {
+      item: "",
       tasks: [],
-    }
+      due: new Date(new Date().setDate(new Date().getDate() + 5))
+        .toISOString()
+        .split("T")[0]
+    };
   },
 
-  computed: {   //dinamikus adatok
-
+  computed: {
+    //dinamikus adatok
   },
 
-  created() {   //ide tudunk olyan dolgokat berakni, amit a komponens létrehozásakor akarunk mutatni (egyből lefusson)
+  created() {
+    //ide tudunk olyan dolgokat berakni, amit a komponens létrehozásakor akarunk mutatni (egyből lefusson)
     axios
       .get(process.env.VUE_APP_API_URL)
-      .then(response => this.tasks = response.data)
-      .catch(err => console.log(err))
+      .then(response => (this.tasks = response.data))
+      .catch(err => console.log(err));
   },
 
-  methods: {    //onlyan függvények, amit a komponens használata során szeretnénk lefuttatni
+  methods: {
+    //onlyan függvények, amit a komponens használata során szeretnénk lefuttatni
     changeCompleted(id) {
       let item = this.tasks.find(item => item.id == id);
       item.completed = !item.completed;
       // szerverrel kommunikáció
-      axios.put(process.env.VUE_APP_API_URL, item).then(response =>console.log(response.data)).catch(err=>console.log(err))
+      axios
+        .put(process.env.VUE_APP_API_URL, item)
+        .then(response => console.log(response.data))
+        .catch(err => console.log(err));
+    },
+    addItem() {
+      const item = {
+        name: this.item,
+        due: this.due,
+        completed: false
+      };
+      axios
+        .post(process.env.VUE_APP_API_URL, item)
+        .then(response => console.log(response))
+        .catch(err => console.log(err));
     }
   }
-}
+};
 </script>
 <style scoped>
 .completed {
@@ -77,5 +110,13 @@ li:hover {
   background: #4fc08d;
   color: white;
   transition: 0.5s;
+}
+form {
+  display: flex;
+}
+input[type="text"] {
+  flex-grow: 3;
+  font-size: 1.3rem;
+  height: 2.5rem;
 }
 </style>
