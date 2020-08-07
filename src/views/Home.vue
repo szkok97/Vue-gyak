@@ -28,49 +28,52 @@ export default{
   },
 
   created() {   //ide tudunk olyan dolgokat berakni, amit a komponens létrehozásakor akarunk mutatni (egyből lefusson)
-    axios.get('http://localhost/vue/task-manager/api/index.php')
-      .then(response => console.log(response))
-      .catch(err =>console.log(err))
+    axios
+      .get(process.env.VUE_APP_API_URL)
+      .then(response => this.tasks = response.data)
+      .catch(err => console.log(err))
   },
 
   methods: {    //onlyan függvények, amit a komponens használata során szeretnénk lefuttatni
     changeCompleted(id) {
       let item = this.tasks.find(item => item.id == id);
       item.completed = !item.completed;
+      // szerverrel kommunikáció
+      axios.put(process.env.VUE_APP_API_URL, item).then(response =>console.log(response.data)).catch(err=>console.log(err))
     }
   }
 }
 </script>
 <style scoped>
-.completed{
+.completed {
   text-decoration: line-through;
   color: #4fc08d;
   border: 0;
 }
-.completed:hover{
+.completed:hover {
   background: white;
   color: #4fc08d;
 }
-h1{
+h1 {
   background: #4fc08d;
   color: white;
   padding: 1rem;
   text-align: center;
 }
-ul{
+ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   color: #333;
   font-size: 1.5rem;
 }
-li{
+li {
   margin: 1rem;
   position: relative;
   top: 0.5rem;
   border-bottom: 1px solid #4fc08d;
 }
-li:hover{
+li:hover {
   background: #4fc08d;
   color: white;
   transition: 0.5s;

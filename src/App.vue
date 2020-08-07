@@ -15,7 +15,7 @@
   padding-top: 20px;
 }
 #nav a{
-  color: #35495e;
+  color: black;
   padding: 10px;
   font-size: 25px;
 }
