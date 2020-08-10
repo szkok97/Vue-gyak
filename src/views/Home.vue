@@ -16,7 +16,9 @@
           :checked="item.completed"
           @click="changeCompleted(item.id)"
         />
-        {{ item.name }} : {{ item.due }}
+        {{ item.name }}
+        <span class="due">{{ item.due }}</span>
+        <span :class="{created: item.created}">{{ item.created }}</span>
       </li>
     </ul>
   </div>
@@ -48,7 +50,7 @@ export default {
     //ide tudunk olyan dolgokat berakni, amit a komponens létrehozásakor akarunk mutatni (egyből lefusson)
     axios
       .get(process.env.VUE_APP_API_URL)
-      .then(response => (this.tasks = response.data))
+      .then(response => {this.tasks = response.data; console.log(this.tasks)})
       .catch(err => console.log(err));
   },
 
@@ -71,7 +73,10 @@ export default {
       };
       axios
         .post(process.env.VUE_APP_API_URL, item)
-        .then(response => console.log(response))
+        .then(response => {
+          this.tasks.push(response.data);
+          this.item = "";
+        })
         .catch(err => console.log(err));
     }
   }
@@ -118,5 +123,11 @@ input[type="text"] {
   flex-grow: 3;
   font-size: 1.3rem;
   height: 2.5rem;
+}
+.created {
+  font-size: .75rem;
+  background: #aaa;
+  color: #ffffff;
+  padding: .25rem;
 }
 </style>
