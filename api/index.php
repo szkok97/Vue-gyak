@@ -2,11 +2,10 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-/*header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Headers: *');
-header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');*/
-
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
 $tasks = file_get_contents('./tasks.json');
 $tasks = json_decode($tasks);
