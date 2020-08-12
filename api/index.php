@@ -15,24 +15,40 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 if($_SERVER['REQUEST_METHOD'] == 'PUT'){
     $item = file_get_contents('php://input');
     $item = json_decode($item);
-    //nézzük meg melyik item módosult
+    $key = array_search($item, $tasks);
     foreach($tasks as $i =>$t){
         if($t->id == $item->id){
-            $tasks[$i] =$item;
+            $tasks[$key] =$item;
             break;
         }
     }
         //mentsük el
     file_put_contents('./tasks.json', json_encode($tasks));
-    echo json_encode($tasks);
+    echo json_encode($item);
 
 }
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $item = file_get_contents('php://input');
-    $item = json_decode($item);
+    if(!empty($item)){
+    $item = json_decode($item); 
     $item->id = uniqid();
     $item->created = date('Y-m-d');
     array_push($tasks,$item);
+    file_put_contents('./tasks.json', json_encode($tasks));
+    echo json_encode($item);
+}
+}
+if($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+    $item = file_get_contents('php://input');
+    $item = json_decode($item);
+    $key = array_search($item, $tasks);
+    foreach($tasks as $i =>$t){
+        if($t->id == $item->id){
+            unset($tasks[$key]);
+            break;
+        }
+    }
+        //mentsük el
     file_put_contents('./tasks.json', json_encode($tasks));
     echo json_encode($item);
 }

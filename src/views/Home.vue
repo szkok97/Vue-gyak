@@ -2,9 +2,25 @@
   <div class="container">
     <h1>Home</h1>
     <form action="" class="row">
-      <input type="text" v-model="item" class="col-sm-7" />
-      <input type="date" v-model="due" @blur="addItem" class="col-sm-5" />
+      <input
+        type="text"
+        v-model="item"
+        class="col-sm-7"
+        @keyup.enter="addItem"
+      />
+      <input type="date" v-model="due" class="col-sm-5" />
+      <span>{{ item }}</span>
     </form>
+    <div class="row">
+      <div class="col-sm-12">
+        <button class="btn btn-primary col-sm-5 m-1" @click="edit">
+          Módosít
+        </button>
+        <button class="btn btn-primary col-sm-5 m-1" @click="addItem">
+          Felvesz
+        </button>
+      </div>
+    </div>
     <div class="row">
       <div class="col-sm-12">
         <div class="row">
@@ -33,6 +49,7 @@
     <ul>
       <task
         @editIconClicked="edit"
+        @torles="torles"
         v-for="item in tasks"
         :key="item.id"
         :item="item"
@@ -67,11 +84,8 @@ export default {
     //dinamikus adatok
     ...mapGetters(["overdueTask"]),
     nyitott: function() {
-      console.log("open belépett");
-      console.log(this.tasks);
       return this.tasks.filter(item => !item.completed).length;
     },
-    // eslint-disable-next-line vue/no-dupe-keys
     tasks: function() {
       return this.$store.state.tasks;
     }
@@ -90,20 +104,37 @@ export default {
         due: this.due,
         completed: false
       };
-      axios
-        .post(process.env.VUE_APP_API_URL, item)
-        .then(response => {
-          this.tasks.push(response.data);
-          this.item = "";
-        })
-        .catch(err => console.log(err));
+      if (item.name != "") {
+        axios
+          .post(process.env.VUE_APP_API_URL, item)
+          .then(response => {
+            this.tasks.push(response.data);
+            this.item = "";
+          })
+          .catch(err => console.log(err));
+      }
     },
     edit(item) {
       this.item = item.name;
       this.due = item.due;
+      console.log(item);
+      axios
+        .put(process.env.VUE_APP_API_URL, {data: item})
+        //.then(response => console.log(response))
+        .catch(err => console.log(err));
     },
     toogleCompleted() {
       this.showCompleted = !this.showCompleted;
+    },
+    torles(item) {
+      //this.tasks.splice(this.tasks.indexOf(item.id), 1);
+      console.log(item);
+      axios
+        .delete(process.env.VUE_APP_API_URL, { data: item })
+        .then(response => {
+          this.tasks.splice(this.tasks.indexOf(response.id), 1);
+        })
+        .catch(err => console.log(err));
     }
   }
 };

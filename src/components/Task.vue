@@ -16,8 +16,12 @@
         ></router-link>
         <div class="font">
           <a href="#"
-            ><i style="margin-right: 10px" class="fas fa-trash sm-1"></i
-          ></a>
+            ><i
+              style="margin-right: 10px"
+              class="fas fa-trash sm-1"
+              @click="torles(item.id)"
+            ></i>
+          </a>
           <a href="#"
             ><i
               @click="edit()"
@@ -66,6 +70,9 @@ export default {
       //this.due = this.item.due
       // TODO due
       this.$emit("editIconClicked", this.item);
+    },
+    torles() {
+      this.$emit("torles", this.item);
     }
   }
 };
